@@ -1,0 +1,309 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/conveyors/protos/ConveyorBelt.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.19181566767067615 0.015681255522493425 -0.9813056852282529 2.9557695618147615
+  position 4.182718324695886 -0.12505125700143924 1.292670821790533
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 0 -0.01 0
+  floorSize 10 10
+}
+Robot {
+  translation 3.02 -0.24 0.45
+  children [
+    Solid {
+      translation 0 0.24 0.35
+      children [
+        Camera {
+          translation -1.46928e-07 0 -0.04
+          rotation 0 1 0 1.5708
+          recognition Recognition {
+          }
+        }
+        Shape {
+          appearance PBRAppearance {
+            roughness 0.2
+            metalness 0
+          }
+          geometry Cone {
+            bottomRadius 0.05
+            height 0.1
+          }
+        }
+      ]
+      name "solid(2)"
+    }
+    DEF base HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0 0 0.0505
+      }
+      device [
+        PositionSensor {
+          name "ps1"
+        }
+        RotationalMotor {
+          name "mot1"
+          maxVelocity 1
+        }
+      ]
+      endPoint Solid {
+        translation 0 0 0.063
+        children [
+          DEF arm HingeJoint {
+            jointParameters HingeJointParameters {
+              axis -1 0 0
+              anchor 0 0.026 0.0126
+            }
+            device [
+              RotationalMotor {
+                name "mot2"
+              }
+            ]
+            endPoint Solid {
+              translation 4.547019999999976e-20 0.026000000000000006 0.11249999999999966
+              rotation -2.754949216705333e-06 -0.9880485841314567 0.15414277598458492 1.7140869908987098e-06
+              children [
+                DEF forearmHinge HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis -1 0 0
+                    anchor 0 0 0.1003
+                  }
+                  device [
+                    RotationalMotor {
+                      name "mot3"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation 0 -6.938893903907228e-18 0.2003
+                    rotation -1 0 0 0
+                    children [
+                      HingeJoint {
+                        jointParameters HingeJointParameters {
+                          anchor 0 0 0.1
+                        }
+                        device [
+                          RotationalMotor {
+                          }
+                        ]
+                        endPoint Solid {
+                          translation 0 0 0.115
+                          children [
+                            Solid {
+                              translation 0 0 0.015
+                              children [
+                                Shape {
+                                  appearance PBRAppearance {
+                                  }
+                                  geometry Box {
+                                    size 0.1 0.01 0.01
+                                  }
+                                }
+                              ]
+                            }
+                            Shape {
+                              geometry Box {
+                                size 0.02 0.02 0.03
+                              }
+                            }
+                          ]
+                        }
+                      }
+                      DEF forearmShape Shape {
+                        appearance PBRAppearance {
+                          roughness 1
+                          metalness 0.8
+                        }
+                        geometry Box {
+                          size 0.02 0.02 0.2
+                        }
+                      }
+                    ]
+                    boundingObject USE forearmShape
+                    physics Physics {
+                      density -1
+                      mass 0.15
+                    }
+                  }
+                }
+                DEF bicebs Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.5 0.3 0.2
+                    roughness 0.5
+                  }
+                  geometry Box {
+                    size 0.02 0.02 0.2
+                  }
+                }
+              ]
+              boundingObject USE bicebs
+              physics Physics {
+                density -1
+                mass 0.15
+              }
+            }
+          }
+          Shape {
+            appearance PBRAppearance {
+              metalness 0
+            }
+            geometry DEF base Box {
+              size 0.15 0.05 0.025
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE base
+        physics Physics {
+          density -1
+          mass 0.1
+        }
+      }
+    }
+    Solid {
+      children [
+        DEF box Shape {
+          geometry Box {
+            size 0.1 0.1 0.1
+          }
+        }
+      ]
+      boundingObject USE box
+    }
+  ]
+  name "robot(1)"
+  boundingObject USE box
+  controller "epuck_go_forward"
+}
+ConveyorBelt {
+  translation 2.48 0 0
+  size 2.5 0.3 0.5
+  speed 0.1
+}
+Robot {
+  translation 2.53 0 0.84
+  children [
+    Camera {
+      translation -1.46928e-07 0 -0.04
+      rotation 0 1 0 1.5708
+      recognition Recognition {
+      }
+    }
+    Solid {
+      children [
+        Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
+          geometry Cone {
+            bottomRadius 0.05
+            height 0.1
+          }
+        }
+      ]
+    }
+  ]
+  controller "camera_node"
+}
+Solid {
+  translation 1.28 0 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.49 0.06 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.96 0.06 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(2)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.75 -0.03 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(3)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
