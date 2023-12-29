@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.19181566767067615 0.015681255522493425 -0.9813056852282529 2.9557695618147615
-  position 4.182718324695886 -0.12505125700143924 1.292670821790533
+  orientation -0.08259222468712775 0.0063170311287856435 0.9965634046757631 3.0490065159122115
+  position 4.203829817809646 -0.23248423926098222 0.942343624983339
 }
 TexturedBackground {
 }
@@ -67,8 +67,12 @@ Robot {
               anchor 0 0.026 0.0126
             }
             device [
+              PositionSensor {
+                name "ps2"
+              }
               RotationalMotor {
                 name "mot2"
+                maxTorque 20
               }
             ]
             endPoint Solid {
@@ -81,6 +85,9 @@ Robot {
                     anchor 0 0 0.1003
                   }
                   device [
+                    PositionSensor {
+                      name "ps3"
+                    }
                     RotationalMotor {
                       name "mot3"
                     }
@@ -91,33 +98,116 @@ Robot {
                     children [
                       HingeJoint {
                         jointParameters HingeJointParameters {
+                          axis -1 0 0
                           anchor 0 0 0.1
                         }
                         device [
                           RotationalMotor {
+                            name "wristMot"
                           }
                         ]
                         endPoint Solid {
-                          translation 0 0 0.115
+                          translation 3.847562726777554e-05 -2.558304509813359e-05 0.11499506543746886
+                          rotation 8.142675878921987e-06 0.176307842112959 -0.9843350774726911 5.156060168236875e-06
                           children [
-                            Solid {
-                              translation 0 0 0.015
-                              children [
-                                Shape {
-                                  appearance PBRAppearance {
-                                  }
-                                  geometry Box {
-                                    size 0.1 0.01 0.01
-                                  }
+                            HingeJoint {
+                              jointParameters HingeJointParameters {
+                                axis 0 0 1
+                              }
+                              device [
+                                RotationalMotor {
                                 }
                               ]
+                              endPoint Solid {
+                                translation 0 0 0.019999999999999626
+                                children [
+                                  SliderJoint {
+                                    jointParameters JointParameters {
+                                      axis -1 0 0
+                                    }
+                                    device [
+                                      PositionSensor {
+                                        name "finsen1"
+                                      }
+                                      LinearMotor {
+                                        name "linMot2"
+                                        maxPosition 0.04
+                                      }
+                                    ]
+                                    endPoint Solid {
+                                      translation -0.005 -1.1094e-16 0.01
+                                      rotation -7.687554399613283e-05 0.9999999970425197 -2.2607634456952784e-06 3.6224422889367774e-12
+                                      children [
+                                        DEF finger Shape {
+                                          geometry Box {
+                                            size 0.01 0.01 0.01
+                                          }
+                                        }
+                                      ]
+                                      boundingObject USE finger
+                                      physics Physics {
+                                        density -1
+                                        mass 0.01
+                                      }
+                                    }
+                                  }
+                                  SliderJoint {
+                                    jointParameters JointParameters {
+                                      axis 1 0 0
+                                    }
+                                    device [
+                                      PositionSensor {
+                                        name "finsen2"
+                                      }
+                                      LinearMotor {
+                                        name "linMot1"
+                                        maxPosition 0.04
+                                      }
+                                    ]
+                                    endPoint Solid {
+                                      translation 0.005 -1.11059e-16 0.01
+                                      rotation -7.636695452546901e-05 -0.9999999970835234 -1.0204329734019837e-06 3.6224346705441156e-12
+                                      children [
+                                        USE finger
+                                      ]
+                                      name "solid(1)"
+                                      boundingObject USE finger
+                                      physics Physics {
+                                        density -1
+                                        mass 0.01
+                                      }
+                                    }
+                                  }
+                                  DEF hand Shape {
+                                    appearance PBRAppearance {
+                                      baseColor 0.5 0.5 0.5
+                                      roughness 0.5
+                                      metalness 0.2
+                                    }
+                                    geometry Box {
+                                      size 0.1 0.01 0.01
+                                    }
+                                  }
+                                ]
+                                name "solid(2)"
+                                boundingObject USE hand
+                                physics Physics {
+                                  density -1
+                                  mass 0.01
+                                }
+                              }
                             }
-                            Shape {
+                            DEF wrist Shape {
                               geometry Box {
                                 size 0.02 0.02 0.03
                               }
                             }
                           ]
+                          boundingObject USE wrist
+                          physics Physics {
+                            density -1
+                            mass 0.01
+                          }
                         }
                       }
                       DEF forearmShape Shape {
@@ -189,7 +279,7 @@ Robot {
 ConveyorBelt {
   translation 2.48 0 0
   size 2.5 0.3 0.5
-  speed 0.1
+  speed 0
 }
 Robot {
   translation 2.53 0 0.84
@@ -262,6 +352,29 @@ Solid {
   ]
 }
 Solid {
+  translation 1.62 -0.09 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(12)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
   translation 1.96 0.06 0.58
   children [
     Shape {
@@ -285,10 +398,243 @@ Solid {
   ]
 }
 Solid {
+  translation 1.86 0 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(4)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.89 0.08 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.7 0.5 0.9
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(8)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.7 0.5 0.9
+  ]
+}
+Solid {
+  translation 1.45 -0.04 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.7 0.5 0.9
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(13)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.7 0.5 0.9
+  ]
+}
+Solid {
+  translation 1.77 0.06 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(5)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.99 -0.04 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(9)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 3.03 0 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(14)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.68 0.08 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(6)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.66 -0.01 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(10)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.58 0.06 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(7)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
+  translation 1.58 -0.03 0.58
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.3
+        metalness 0
+      }
+      geometry DEF testObj Box {
+        size 0.05 0.05 0.02
+      }
+    }
+  ]
+  name "solid(11)"
+  boundingObject USE testObj
+  physics Physics {
+    density -1
+    mass 0.1
+  }
+  recognitionColors [
+    0.8 0.8 0.8
+  ]
+}
+Solid {
   translation 1.75 -0.03 0.58
   children [
     Shape {
       appearance PBRAppearance {
+        baseColor 0.7 0.5 0.9
         roughness 0.3
         metalness 0
       }
@@ -304,6 +650,6 @@ Solid {
     mass 0.1
   }
   recognitionColors [
-    0.8 0.8 0.8
+    0.7 0.5 0.9
   ]
 }
